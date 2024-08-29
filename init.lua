@@ -11,7 +11,6 @@ end
 
 local gameActions = {
     [10260193230] = function()
-        -- Meme Sea
         pcall(function()
             loadstring(game:HttpGet("https://raw.githubusercontent.com/swe7z/ordep-menu/main/release/memesea.lua", true))()
         end)
@@ -20,7 +19,7 @@ local gameActions = {
 
 local action = gameActions[GameID]
 if action then
-    pcall(action)  -- Não precisa dos parênteses após `action`
+    pcall(action)
 else
     _ntf("Unsupported Game: " .. GameID)
 end
