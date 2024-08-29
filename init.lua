@@ -1,6 +1,6 @@
 local GameID = game.PlaceId
-local init_ntf = function(message)
-                task.wait(0.1)
+local _ntf = function(message)
+                task.wait()
                 StarterGui:SetCore("SendNotification", {
                     Title = "Sistema";
                     Text = message;
@@ -21,5 +21,5 @@ local action = gameActions[GameID]
 if action then
     action()
 else
-    init_ntf("Unsupported Game: " .. GameID)
+    _ntf("Unsupported Game: " .. GameID)
 end
