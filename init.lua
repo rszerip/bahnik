@@ -19,7 +19,7 @@ local gameActions = {
 
 local action = gameActions[GameID]
 if action then
-    action()
+    pcall(action())
 else
     _ntf("Unsupported Game: " .. GameID)
 end
