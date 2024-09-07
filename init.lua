@@ -1,4 +1,5 @@
 local GameID = game.PlaceId
+local StarterGui = game:GetService("StarterGui")
 local _ntf = function(message)
     task.wait()
     StarterGui:SetCore("SendNotification", {
