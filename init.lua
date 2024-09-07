@@ -12,12 +12,15 @@ end
 
 local gameActions = {
     [10260193230] = function() 
+        _ntf("Script loading...")
         loadstring(game:HttpGet("https://raw.githubusercontent.com/swe7z/ordep-menu/main/release/memesea.lua", true))() 
     end,
     [11445923563] = function() 
+        _ntf("Script loading...")
         loadstring(game:HttpGet("https://raw.githubusercontent.com/swe7z/ordep-menu/main/release/onefruit.lua", true))() 
     end,
     [13155198714] = function() 
+        _ntf("Script loading...")
         loadstring(game:HttpGet("https://raw.githubusercontent.com/swe7z/ordep-menu/main/release/onefruit.lua", true))() 
     end
 }
