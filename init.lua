@@ -11,14 +11,21 @@ local _ntf = function(message)
 end
 
 local gameActions = {
-    [10260193230] = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/swe7z/ordep-menu/main/release/memesea.lua", true))() end,
-    [11445923563] = function() loadstring(game:HttpGet("https://raw.githubusercontent.com/swe7z/ordep-menu/main/release/onefruit.lua", true))() end
+    [10260193230] = function() 
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/swe7z/ordep-menu/main/release/memesea.lua", true))() 
+    end,
+    [11445923563] = function() 
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/swe7z/ordep-menu/main/release/onefruit.lua", true))() 
+    end,
+    [13155198714] = function() 
+        loadstring(game:HttpGet("https://raw.githubusercontent.com/swe7z/ordep-menu/main/release/onefruit.lua", true))() 
+    end
 }
 
 local action = gameActions[GameID]
 if action then
-		task.wait()
-		action()
+    task.wait()
+    action()
 else
     _ntf("Unsupported Game: " .. GameID)
 end
