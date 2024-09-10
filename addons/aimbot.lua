@@ -1,8 +1,5 @@
 local Library = {}
 
-local maxDistance = 500
-local maxTransparency = 0.1
-
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
@@ -29,9 +26,8 @@ function Library:lookAt(target)
     Cam.CFrame = newCFrame
 end
 
-function calculateTransparency(Settings, distance)
-    local maxDistance = Settings.AimbotFov
-    local transparency = (1 - (distance / maxDistance)) * maxTransparency
+function Library:calculateTransparency(Settings, distance)
+    local transparency = (1 - (distance / 500)) * 0.1
     return transparency
 end
 
@@ -58,7 +54,7 @@ function Library:getClosestPlayerInFOV(trg_part)
                     local ePos, isVisible = Cam:WorldToViewportPoint(part.Position)
                     local distance = (Vector2.new(ePos.x, ePos.y) - playerMousePos).Magnitude
 
-                    if distance < last and isVisible and distance < Settings.AimbotFov and distance < maxDistance then
+                    if distance < last and isVisible and distance < Settings.AimbotFov and distance < 500 then
                         last = distance
                         nearest = player
                     end
