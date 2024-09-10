@@ -1,9 +1,4 @@
-print("Aimlib Loaded")
-
-_G.aimtoggled = false
-_G.aimfov = 40
-_G.teamCheck = false
-_G.showFov = false
+local Library = {}
 
 local maxDistance = 500
 local maxTransparency = 0.1
@@ -14,42 +9,33 @@ local Players = game:GetService("Players")
 local Cam = game.Workspace.CurrentCamera
 
 local FOVring = Drawing.new("Circle")
-FOVring.Visible = _G.showFov
+FOVring.Visible = false
 FOVring.Thickness = 2
 FOVring.Color = Color3.fromRGB(128, 0, 128)
 FOVring.Filled = false
-FOVring.Radius = _G.aimfov
+FOVring.Radius = 40
 FOVring.Position = Cam.ViewportSize / 2
 
-local function updateDrawings()
+function Library:updateDrawings(Settings)
     local camViewportSize = Cam.ViewportSize
     FOVring.Position = camViewportSize / 2
-    FOVring.Visible = _G.showFov
-    FOVring.Radius = tonumber(_G.aimfov)
+    FOVring.Visible = Settings.AimbotShowFov
+    FOVring.Radius = tonumber(Settings.AimbotFov)
 end
 
-local function onKeyDown(input)
-    if input.KeyCode == Enum.KeyCode.Delete then
-        RunService:UnbindFromRenderStep("FOVUpdate")
-        FOVring:Remove()
-    end
-end
-
-UserInputService.InputBegan:Connect(onKeyDown)
-
-local function lookAt(target)
+function Library:lookAt(target)
     local lookVector = (target - Cam.CFrame.Position).unit
     local newCFrame = CFrame.new(Cam.CFrame.Position, Cam.CFrame.Position + lookVector)
     Cam.CFrame = newCFrame
 end
 
-local function calculateTransparency(distance)
-    local maxDistance = _G.aimfov
+function calculateTransparency(Settings, distance)
+    local maxDistance = Settings.AimbotFov
     local transparency = (1 - (distance / maxDistance)) * maxTransparency
     return transparency
 end
 
-local function isPlayerAlive(player)
+function isPlayerAlive(player)
     local character = player.Character
     if character and character:FindFirstChild("Humanoid") then
         return character.Humanoid.Health > 0
@@ -57,7 +43,7 @@ local function isPlayerAlive(player)
     return false
 end
 
-local function getClosestPlayerInFOV(trg_part)
+function Library:getClosestPlayerInFOV(trg_part)
     local nearest = nil
     local last = math.huge
     local playerMousePos = Cam.ViewportSize / 2
@@ -65,14 +51,14 @@ local function getClosestPlayerInFOV(trg_part)
 
     for i = 1, #Players:GetPlayers() do
         local player = Players:GetPlayers()[i]
-        if player and player ~= localPlayer and (not _G.teamCheck or player.Team ~= localPlayer.Team) then
+        if player and player ~= localPlayer and (not Settings.AimbotTeamCheck or player.Team ~= localPlayer.Team) then
             if isPlayerAlive(player) then
                 local part = player.Character and player.Character:FindFirstChild(trg_part)
                 if part then
                     local ePos, isVisible = Cam:WorldToViewportPoint(part.Position)
                     local distance = (Vector2.new(ePos.x, ePos.y) - playerMousePos).Magnitude
 
-                    if distance < last and isVisible and distance < _G.aimfov and distance < maxDistance then
+                    if distance < last and isVisible and distance < Settings.AimbotFov and distance < maxDistance then
                         last = distance
                         nearest = player
                     end
@@ -84,31 +70,4 @@ local function getClosestPlayerInFOV(trg_part)
     return nearest
 end
 
-local function toggleTeamCheck()
-    _G.teamCheck = not _G.teamCheck
-end
-
-toggleTeamCheck()
-toggleTeamCheck()
-
-RunService.RenderStepped:Connect(function()
-    updateDrawings()
-    local closest = getClosestPlayerInFOV("Head")
-    if closest and closest.Character:FindFirstChild("Head") then
-        if _G.aimtoggled then
-          lookAt(closest.Character.Head.Position)
-        else
-          return nil
-        end
-    end
-    
-    if closest then
-        local ePos, isVisible = Cam:WorldToViewportPoint(closest.Character.Head.Position)
-        local distance = (Vector2.new(ePos.x, ePos.y) - (Cam.ViewportSize / 2)).Magnitude
-        FOVring.Transparency = calculateTransparency(distance)
-    else
-        FOVring.Transparency = maxTransparency
-    end
-    
-    wait(0.03)
-end)
+return Library
