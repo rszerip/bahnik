@@ -1,12 +1,9 @@
-print("Cliplib Loaded")
-
-_G.noclip = nil
-local collide = nil
-local runservice = game:GetService("RunService")
+local collide
 local player = game:GetService("Players").LocalPlayer
 
-runservice.Stepped:Connect(function()
-    if _G.noclip == true then
+game:GetService('RunService').RenderStepped:Connect(function(Settings)
+		task.wait()
+    if Settings.noclip then
         collide = false
         for i,v in pairs(player.Character:GetDescendants()) do
             if v:IsA("BasePart") then
@@ -14,6 +11,7 @@ runservice.Stepped:Connect(function()
             end
         end
     else
+				if not collide then
         collide = true
         for i,v in pairs(player.Character:GetDescendants()) do
             if v:IsA("BasePart") then
@@ -21,5 +19,6 @@ runservice.Stepped:Connect(function()
                 break
             end
         end
+    end
     end
 end)
